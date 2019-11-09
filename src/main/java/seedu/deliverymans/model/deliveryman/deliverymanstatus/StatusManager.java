@@ -29,19 +29,37 @@ public class StatusManager {
      * Can only be called by higher-level classes that uses this class (ie. DeliverymenDatabase)
      */
     public void initStatusLists(UniqueDeliverymanList deliverymenList) {
+        availableMen.clear();
+        unavailableMen.clear();
+        deliveringMen.clear();
         for (Deliveryman man : deliverymenList) {
             switch (man.getStatus().getDescription()) {
             case "AVAILABLE":
-                updateStatusOf(man, "AVAILABLE");
+                availableMen.add(man);
                 break;
             case "UNAVAILABLE":
-                updateStatusOf(man, "UNAVAILABLE");
+                unavailableMen.add(man);
                 break;
             case "DELIVERING":
                 deliveringMen.add(man);
                 break;
             default:
                 return;
+            }
+        }
+    }
+
+    /**
+     * Set the status of the deliverymen in the list to the status stored in this class.
+     */
+    public void updateAllStatusOf(UniqueDeliverymanList deliverymenList) {
+        for (Deliveryman man : deliverymenList) {
+            if (availableMen.contains(man)) {
+                man.setStatusTo(UniqueStatusList.getAvailableTag());
+            } else if (deliveringMen.contains(man)) {
+                man.setStatusTo(UniqueStatusList.getDeliveringTag());
+            } else if (unavailableMen.contains(man)){
+                man.setStatusTo(UniqueStatusList.getUnavailableTag());
             }
         }
     }
@@ -209,6 +227,22 @@ public class StatusManager {
         default:
             return;
         }
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        if (!(other instanceof StatusManager)) {
+            return false;
+        }
+
+        StatusManager otherManager = (StatusManager) other;
+        return availableMen.equals(otherManager.availableMen)
+                && unavailableMen.equals(otherManager.unavailableMen)
+                && deliveringMen.equals(otherManager.deliveringMen);
     }
 
 }

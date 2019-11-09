@@ -42,7 +42,6 @@ public class DeliverymenDatabase implements ReadOnlyDeliverymenDatabase {
     public DeliverymenDatabase(ReadOnlyDeliverymenDatabase toBeCopied) {
         this();
         resetData(toBeCopied);
-        statusManager.initStatusLists(deliverymen);
     }
 
     /**
@@ -60,6 +59,7 @@ public class DeliverymenDatabase implements ReadOnlyDeliverymenDatabase {
         requireNonNull(newData);
 
         setDeliverymen(newData.getDeliverymenList());
+        statusManager.initStatusLists(deliverymen);
     }
 
     // ========== Basic functions related to deliverymen ==========================================================
@@ -78,7 +78,7 @@ public class DeliverymenDatabase implements ReadOnlyDeliverymenDatabase {
      */
     public void addDeliveryman(Deliveryman man) {
         deliverymen.add(man);
-        statusManager.addUnavailableMan(man);
+        statusManager.assignStatusTagTo(man, man.getStatus().getDescription());
     }
 
     /**
@@ -181,14 +181,23 @@ public class DeliverymenDatabase implements ReadOnlyDeliverymenDatabase {
 
     @Override
     public ObservableList<Deliveryman> getDeliverymenList() {
+        statusManager.updateAllStatusOf(deliverymen);
         return deliverymen.asUnmodifiableObservableList();
     }
 
     @Override
     public boolean equals(Object other) {
-        return other == this
-                || (other instanceof DeliverymenDatabase
-                && deliverymen.equals(((DeliverymenDatabase) other).deliverymen));
+        if (other == this) {
+            return true;
+        }
+
+        if (!(other instanceof DeliverymenDatabase)) {
+            return false;
+        }
+
+        DeliverymenDatabase otherDatabase = (DeliverymenDatabase) other;
+        return deliverymen.equals(otherDatabase.deliverymen)
+                && statusManager.equals(otherDatabase.statusManager);
     }
 
     @Override
