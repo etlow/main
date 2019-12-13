@@ -348,7 +348,6 @@ image::userguide\ListOrder3.png[width="790"]
 {nbsp} +
 
 // end::order[]
-// tag::undoRedo[]
 
 ==== Undoing a command: `-undo`
 This command undoes the effects of a command that you have previously executed.
@@ -395,6 +394,7 @@ The operation of this command is similar to the `-undo` command which is illustr
 
 {nbsp} +
 
+// tag::undoRedo[]
 ==== Listing of undo/redo actions: `-undo_list`
 This command lists the actions that can be undone and redone so that multiple actions can be redone
 at once with the `-undo_till` command.

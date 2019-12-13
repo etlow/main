@@ -163,7 +163,6 @@ Classes used by multiple components are in the `seedu.deliverymans.commons` pack
 
 This section describes some noteworthy details on how certain features are implemented.
 
-// tag::undoredo[]
 === Undo/redo feature
 
 The undo/redo feature lets users undo and redo changes to the data stored in the app, which were
@@ -204,6 +203,7 @@ If a command does not modify the data, when `UndoHistory` checks whether the cur
 to the data in the previous state according to its `equals()` method, it will realise that it is
 indeed equal. It will then not store the state into the `history` list.
 
+// tag::undoredo[]
 Step 4. The user now decides that adding the person was a mistake, and undoes that action by executing the `undo` command. The `undo` command will call `Model#undo()`, which will shift the `current` state pointer once to the left, pointing it to the previous state, and restores the data to that state.
 
 image::UndoRedoState3.png[]
